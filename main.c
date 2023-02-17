@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main()
+int main(int argc, char *argv[])
 {
     FILE* tfile;
 
-    tfile = fopen("input", "r");
+    tfile = fopen(argv[1], "r");
 
     if (tfile == NULL) {
         printf("Can`t open file\n");
