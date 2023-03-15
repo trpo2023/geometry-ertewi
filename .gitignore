@@ -1,3 +1,5 @@
 *#
 *~
-geometry
+main
+*.d
+*.o

@@ -1,2 +1,10 @@
-main : main.c
-	gcc -Wall -Werror -o geometry main.c
+CFLAGS = -Wall -Wextra -Werror
+CPPFLAGS = -MMD
+
+main: main.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+main.o: main.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+	
+-include main.d
