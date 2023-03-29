@@ -3,10 +3,13 @@
 #include <string.h>
 #include <ctype.h>
 
+char *err_msg; //error message
+int err_smb; //symbol of error
 
-int main(int argc, char *argv[])
-{
-    int i, j, s;
+int find_circle(char *str);
+
+int main(int argc, char *argv[]) {
+    int found, s;
 
     FILE* tfile;
 
@@ -21,13 +24,38 @@ int main(int argc, char *argv[])
     
     char str[100 + 1];
     fgets(str, 100, tfile);
-    printf("%s\n", str);
+    printf("%s", str);
+
+    found = find_circle(str);
+
+    // printf("\n%d\n", '.');
+
+    if(found == 0) {
+        printf("\nRight entry");
+        fclose(tfile);
+        printf("\nFile closed\n");
+        printf("Exit program...\n");
+        return 0;
+    } else {
+        for(s = 0; s < err_smb; s++)
+            printf(" ");
+        printf("^\n");
+        printf("Error at column %d: %s", err_smb + 1, err_msg);
+        fclose(tfile);
+        printf("\nFile closed\n");
+        printf("Exit program with error\n");
+        return 1;
+    }
+
+}
+
+int find_circle(char *str) {
+    int i, j;
 
     if(strncmp(str, "circle(", 7) == 0) { // circle
-        printf("have 'circle'\n");
 
         for(i = 7; i < strlen(str); i++) { //founding number 1
-            if(str[i] == 32) {
+            if(str[i] == 32) { // " "
                     continue;
                 }
             if(isdigit(str[i])) {
@@ -35,66 +63,58 @@ int main(int argc, char *argv[])
                     if(isdigit(str[j])) {
                         continue;
                     }
-                    if(str[j] == 32) {
-                        goto number_found_1;
-                    }
-                    if(str[j] == 46) {
+                    if(str[j] == 32) { // " "
                         break;
                     }
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
+                    if(str[j] == 46) { // "."
+                        break;
                     }
-                    printf("^\nError at column %d: expected digit, dot or space\n", s);
-                    goto exit_with_error;
+                    switch(str[j]) {
+                        case 32: break; // " "
+                        case 46: break; // "."
+                    }
+                    err_msg = "expected digit, dot or space\n";
+                    err_smb = j;
+                    return 1;
                 }
                 if(str[j] == 0) {
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
-                    }
-                        printf("^\nError at column %d: expected digit, dot or space\n", s);
-                    goto exit_with_error;
+                    err_msg = "expected digit, dot or space\n";
+                    err_smb = j;
+                    return 1;
                 }
             } else {
-                for(s = 0; s < i; s++) {
-                    printf(" ");
-                }
-                printf("^\nError at column %d: expected number or space\n", s);
-                goto exit_with_error;
+                err_msg = "expected number or space\n";
+                err_smb = i;
+                return 1;
             }
-            for(j++; j < strlen(str); j++) {
-                    if(isdigit(str[j])) {
-                        continue;
-                    }
-                    if(str[j] == 32) {
-                        goto number_found_1;
-                    }
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
-                    }
-                    printf("^\nError at column %d: expected digit or space\n", s);
-                    goto exit_with_error;
+            if(str[j] == 46) {
+                for(j++; j < strlen(str); j++) {
+                        if(isdigit(str[j])) {
+                            continue;
+                        }
+                        if(str[j] == 32) { // " "
+                            break;
+                        }
+                        err_msg = "expected digit or space\n";
+                        err_smb = j;
+                        return 1;
+                }
             }
             if(str[j] == 0) {
-                for(s = 0; s < j; s++) {
-                    printf(" ");
-                }
-                    printf("^\nError at column %d: expected digit or space\n", s);
-                goto exit_with_error;
+                err_msg = "expected digit or space\n";
+                err_smb = j;
+                return 1;
             }
-            number_found_1:
-            printf("have first number\n");
             break;
         }
         if(str[i] == 0) {
-            for(s = 0; s < i; s++) {
-                printf(" ");
-            }
-                printf("^\nError at column %d: expected number\n", s);
-            goto exit_with_error;
+            err_msg = "expected number\n";
+            err_smb = i;
+            return 1;
         }
         
         for(i = j + 1; i < strlen(str); i++) { //founding number 2
-            if(str[i] == 32) {
+            if(str[i] == 32) { // " "
                     continue;
                 }
             if(isdigit(str[i])) {
@@ -102,94 +122,75 @@ int main(int argc, char *argv[])
                     if(isdigit(str[j])) {
                         continue;
                     }
-                    if(str[j] == 44) {
-                        goto number_found_2;
-                    }
-                    if(str[j] == 32) {
-                        goto number_found_2;
-                    }
-                    if(str[j] == 46) {
+                    if(str[j] == 44) { // ","
                         break;
                     }
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
+                    if(str[j] == 32) { // " "
+                        break;
                     }
-                    printf("^\nError at column %d: expected digit, dot, space or comma\n", s);
-                    goto exit_with_error;
+                    if(str[j] == 46) { // "."
+                        break;
+                    }
+                    err_msg = "expected digit, dot, space or comma\n";
+                    err_smb = j;
+                    return 1;
                 }
                 if(str[j] == 0) {
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
-                    }
-                        printf("^\nError at column %d: expected digit, dot, comma or space\n", s);
-                    goto exit_with_error;
+                    err_msg = "expected digit, dot, space or comma\n";
+                    err_smb = j;
+                    return 1;
                 }
             } else {
-                for(s = 0; s < i; s++) {
-                    printf(" ");
-                }
-                printf("^\nError at column %d: expected number or space\n", s);
-                goto exit_with_error;
+                err_msg = "expected number or space\n";
+                err_smb = i;
+                return 1;
             }
-            for(j++; j < strlen(str); j++) {
-                    if(isdigit(str[j])) {
-                        continue;
-                    }
-                    if(str[j] == 44) {
-                        goto number_found_2;
-                    }
-                    if(str[j] == 32) {
-                        goto number_found_2;
-                    }
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
-                    }
-                    printf("^\nError at column %d: expected digit, space or comma\n", s);
-                    goto exit_with_error;
+            if(str[j] == 46) {
+                for(j++; j < strlen(str); j++) {
+                        if(isdigit(str[j])) {
+                            continue;
+                        }
+                        if(str[j] == 44) { // ","
+                            break;
+                        }
+                        if(str[j] == 32) { // " "
+                            break;
+                        }
+                        err_msg = "expected digit, space or comma\n";
+                        err_smb = j;
+                        return 1;
                 }
+            }
             if(str[j] == 0) {
-                for(s = 0; s < j; s++) {
-                    printf(" ");
-                }
-                    printf("^\nError at column %d: expected digit, comma or space\n", s);
-                goto exit_with_error;
+                err_msg = "expected digit, space or comma\n";
+                err_smb = j;
+                return 1;
             }
-            number_found_2:
-            printf("have second number\n");
             break;
         }
         if(str[i] == 0) {
-            for(s = 0; s < i; s++) {
-                printf(" ");
-            }
-                printf("^\nError at column %d: expected number\n", s);
-            goto exit_with_error;
+            err_msg = "expected number\n";
+            err_smb = i;
+            return 1;
         }
         for(; j < strlen(str); j++) {
-            if(str[j] == 44) {
-                goto comma_found;
+            if(str[j] == 44) { // ","
+                break;
             }
-            if(str[j] == 32) {
+            if(str[j] == 32) { // " "
                 continue;
             }
-            for(s = 0; s < j; s++) {
-                printf(" ");
-            }
-            printf("^\nError at column %d: expected space or comma\n", s);
-            goto exit_with_error;
-            comma_found:
-            printf("have comma\n");
-            break;
+            err_msg = "expected space or comma\n";
+            err_smb = j;
+            return 1;
         }
         if(str[j] == 0) {
-            for(s = 0; s < j; s++) {
-                printf(" ");
-            }
-                printf("^\nError at column %d: expected comma\n", s);
-            goto exit_with_error;
+            err_msg = "expected comma\n";
+            err_smb = j;
+            return 1;
         }
         for(i = j + 1; i < strlen(str); i++) { //founding number 3
-            if(str[i] == 32) {
+            if(str[i] == 32) { // " "
                     continue;
                 }
             if(isdigit(str[i])) {
@@ -197,113 +198,84 @@ int main(int argc, char *argv[])
                     if(isdigit(str[j])) {
                         continue;
                     }
-                    if(str[j] == 32) {
-                        goto number_found_3;
-                    }
-                    if(str[j] == 46) {
+                    if(str[j] == 32) { // " "
                         break;
                     }
-                    if(str[j] == 41) { // )
-                        goto number_found_3;
+                    if(str[j] == 46) { // "."
+                        break;
                     }
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
+                    if(str[j] == 41) { // ")"
+                        break;
                     }
-                    printf("^\nError at column %d: expected digit, dot, space or bracket\n", s);
-                    goto exit_with_error;
+                    err_msg = "expected digit, dot, space or bracket\n";
+                    err_smb = j;
+                    return 1;
                 }
                 if(str[j] == 0) {
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
-                    }
-                        printf("^\nError at column %d: expected digit, dot, bracket or space\n", s);
-                    goto exit_with_error;
+                    err_msg = "expected digit, dot, bracket or space\n";
+                    err_smb = j;
+                    return 1;
                 }
             } else {
-                for(s = 0; s < i; s++) {
-                    printf(" ");
-                }
-                printf("^\nError at column %d: expected number or space\n", s);
-                goto exit_with_error;
+                err_msg = "expected number or space\n";
+                err_smb = i;
+                return 1;
             }
-            for(j++; j < strlen(str); j++) {
+            if(str[j] == 46) {
+                for(j++; j < strlen(str); j++) {
                     if(isdigit(str[j])) {
                         continue;
                     }
-                    if(str[j] == 32) {
-                        goto number_found_3;
+                    if(str[j] == 32) { // " "
+                        break;
                     }
-                    if(str[j] == 41) { // )
-                        goto number_found_3;
+                    if(str[j] == 41) { // ")"
+                        break;
                     }
-                    for(s = 0; s < j; s++) {
-                        printf(" ");
+                    err_msg = "expected digit, space or bracket\n";
+                    err_smb = j;
+                    return 1;
                     }
-                    printf("^\nError at column %d: expected digit, space or bracket\n", s);
-                    goto exit_with_error;
-                }
-            if(str[j] == 0) {
-                for(s = 0; s < j; s++) {
-                    printf(" ");
-                }
-                    printf("^\nError at column %d: expected digit, bracket or space\n", s);
-                goto exit_with_error;
             }
-            number_found_3:
-            printf("have third number\n");
+            if(str[j] == 0) {
+                err_msg = "expected digit, bracket or space\n";
+                err_smb = j;
+                return 1;
+            }
             break;
         }
         if(str[i] == 0) {
-            for(s = 0; s < i; s++) {
-                printf(" ");
-            }
-                printf("^\nError at column %d: expected number\n", s);
-            goto exit_with_error;
+            err_msg = "expected number\n";
+            err_smb = i;
+            return 1;
         }
         for(; j < strlen(str); j++) {
             if(str[j] == 32) { // " "
                 continue;
             }
-            if(str[j] == 41) { // )
-                goto bracket_found;
+            if(str[j] == 41) { // ")"
+                break;
             }
-            for(s = 0; s < j; s++) {
-                printf(" ");
-            }
-            printf("^\nError at column %d: expected space or bracket\n", s);
-            goto exit_with_error;
-            bracket_found:
-            printf("have bracket");
-            goto right_circle;
+            err_msg = "expected space or bracket\n";
+            err_smb = j;
+            return 1;
         }
         if(str[j] == 0) {
-            for(s = 0; s < j; s++) {
-                printf(" ");
-            }
-                printf("^\nError at column %d: expected bracket\n", s);
-            goto exit_with_error;
+            err_msg = "expected bracket\n";
+            err_smb = j;
+            return 1;
         }
 
     } else {
         if(strncmp(str, "circle", 6) == 0) {
-            printf("      ^\nError at column 7: expected '('\n");
-            goto exit_with_error;
+            err_msg = "expected '('\n";
+            err_smb = 6;
+            return 1;
         } else {
-            printf("^\nError at column 0: expected 'circle'\n");
-            goto exit_with_error;
+            err_msg = "expected 'circle'\n";
+            err_smb = 0;
+            return 1;
         }
     }
-    right_circle:
-
-    printf("\n%d\n", ' ');
-
-    fclose(tfile);
-    printf("\nFile closed\n");
-    printf("Exit program...\n");
     return 0;
-    exit_with_error:
-    fclose(tfile);
-    printf("\nFile closed\n");
-    printf("Exit program with error\n");
-    return 1;
 }
