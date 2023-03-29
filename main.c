@@ -69,10 +69,6 @@ int find_circle(char *str) {
                     if(str[j] == 46) { // "."
                         break;
                     }
-                    switch(str[j]) {
-                        case 32: break; // " "
-                        case 46: break; // "."
-                    }
                     err_msg = "expected digit, dot or space\n";
                     err_smb = j;
                     return 1;
