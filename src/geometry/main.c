@@ -12,8 +12,15 @@ int main(int argc, char *argv[]) {
     int found, s;
 
     FILE* tfile;
-
-    tfile = fopen(argv[1], "r");
+    printf("%d", argc);
+    if(argc == 2) {
+    
+	tfile = fopen(argv[1], "r");	
+    }
+    if(argc == 1) {
+    	
+    	printf("Enter text: ");
+    }
 
     if (tfile == NULL) {
         printf("Can`t open file\n");
@@ -50,7 +57,7 @@ int main(int argc, char *argv[]) {
 }
 
 int find_circle(char *str) {
-    int i, j;
+    unsigned int i, j;
 
     if(strncmp(str, "circle(", 7) == 0) { // circle
 
