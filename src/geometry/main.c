@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <libgeometry/geometrylib.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,8 +10,6 @@ int err_smb;   // symbol of error
 char c_radius[100] = "";
 
 int find_circle(char* str);
-float count_perimeter(float rad);
-float count_area(float rad);
 
 int main(int argc, char* argv[])
 {
@@ -37,12 +36,10 @@ int main(int argc, char* argv[])
 
     found = find_circle(str);
 
-    radius = atof(c_radius);
-    printf("  perimeter: = %.4f\n", count_perimeter(radius));
-    printf("  area: = %.4f\n", count_area(radius));
-
     if (found == 0) {
-        printf("\nRight entry\n");
+        radius = atof(c_radius);
+        printf("  perimeter: = %.4f\n", count_perimeter(radius));
+        printf("  area: = %.4f\n", count_area(radius));
         if (argc == 2) {
             fclose(tfile);
             printf("File closed\n");
@@ -61,16 +58,6 @@ int main(int argc, char* argv[])
         printf("Exit program with error...\n");
         return 1;
     }
-}
-
-float count_perimeter(float rad)
-{
-    return (2 * M_PI * rad);
-}
-
-float count_area(float rad)
-{
-    return (M_PI * rad * rad);
 }
 
 int find_circle(char* str)
