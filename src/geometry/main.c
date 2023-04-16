@@ -2,16 +2,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 char* err_msg; // error message
 int err_smb;   // symbol of error
+char c_radius[100] = "";
 
 int find_circle(char* str);
+float count_perimeter(float rad);
 
 int main(int argc, char* argv[])
 {
     int found, s;
     char str[100 + 1];
+    float radius;
 
     FILE* tfile;
     if (argc == 2) {
@@ -22,7 +26,7 @@ int main(int argc, char* argv[])
         } else {
             printf("File opened succesfully\n\n");
             fgets(str, 100, tfile);
-            printf("%s\n", str);
+            printf("%s", str);
         }
     }
     if (argc == 1) {
@@ -32,7 +36,9 @@ int main(int argc, char* argv[])
 
     found = find_circle(str);
 
-    // printf("\n%d\n", '.');
+    radius = atof(c_radius);
+    printf("  perimeter: = %.4f\n", count_perimeter(radius));
+
 
     if (found == 0) {
         printf("\nRight entry\n");
@@ -56,9 +62,14 @@ int main(int argc, char* argv[])
     }
 }
 
+float count_perimeter(float rad) {
+    return (2 * M_PI * rad);
+}
+
 int find_circle(char* str)
 {
     unsigned int i, j;
+    char buffer[2];
 
     if (strncmp(str, "circle(", 7) == 0) { // circle
 
@@ -194,18 +205,24 @@ int find_circle(char* str)
             return 1;
         }
         for (i = j + 1; i < strlen(str); i++) { // founding number 3
-            if (str[i] == 32) {                 // " "
+            if (str[i] == 32) {         // " "
                 continue;
             }
+            buffer[0] = str[i];
+            strcat(c_radius, buffer);
             if (isdigit(str[i])) {
                 for (j = i + 1; j < strlen(str); j++) {
                     if (isdigit(str[j])) {
+                        buffer[0] = str[j];
+                        strcat(c_radius, buffer);
                         continue;
                     }
                     if (str[j] == 32) { // " "
                         break;
                     }
                     if (str[j] == 46) { // "."
+                        buffer[0] = str[j];
+                        strcat(c_radius, buffer);
                         break;
                     }
                     if (str[j] == 41) { // ")"
@@ -228,6 +245,8 @@ int find_circle(char* str)
             if (str[j] == 46) {
                 for (j++; j < strlen(str); j++) {
                     if (isdigit(str[j])) {
+                        buffer[0] = str[j];
+                        strcat(c_radius, buffer);
                         continue;
                     }
                     if (str[j] == 32) { // " "
