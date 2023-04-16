@@ -10,6 +10,7 @@ char c_radius[100] = "";
 
 int find_circle(char* str);
 float count_perimeter(float rad);
+float count_area(float rad);
 
 int main(int argc, char* argv[])
 {
@@ -38,6 +39,7 @@ int main(int argc, char* argv[])
 
     radius = atof(c_radius);
     printf("  perimeter: = %.4f\n", count_perimeter(radius));
+    printf("  area: = %.4f\n", count_area(radius));
 
 
     if (found == 0) {
@@ -64,6 +66,10 @@ int main(int argc, char* argv[])
 
 float count_perimeter(float rad) {
     return (2 * M_PI * rad);
+}
+
+float count_area(float rad) {
+    return (M_PI * rad * rad);
 }
 
 int find_circle(char* str)
