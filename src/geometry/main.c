@@ -1,8 +1,8 @@
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 char* err_msg; // error message
 int err_smb;   // symbol of error
@@ -41,7 +41,6 @@ int main(int argc, char* argv[])
     printf("  perimeter: = %.4f\n", count_perimeter(radius));
     printf("  area: = %.4f\n", count_area(radius));
 
-
     if (found == 0) {
         printf("\nRight entry\n");
         if (argc == 2) {
@@ -64,11 +63,13 @@ int main(int argc, char* argv[])
     }
 }
 
-float count_perimeter(float rad) {
+float count_perimeter(float rad)
+{
     return (2 * M_PI * rad);
 }
 
-float count_area(float rad) {
+float count_area(float rad)
+{
     return (M_PI * rad * rad);
 }
 
@@ -211,7 +212,7 @@ int find_circle(char* str)
             return 1;
         }
         for (i = j + 1; i < strlen(str); i++) { // founding number 3
-            if (str[i] == 32) {         // " "
+            if (str[i] == 32) {                 // " "
                 continue;
             }
             buffer[0] = str[i];
