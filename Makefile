@@ -3,7 +3,7 @@ CPPFLAGS = -MMD
 
 .PHONY: clean
 
-bin/main: bin/main.o bin/geometrylib.a
+bin/main: bin/main.o bin/geometrylib.a bin/parser.a
 	$(CC) $(CFLAGS) -o $@ $^
 
 bin/main.o: src/geometry/main.c
@@ -12,7 +12,13 @@ bin/main.o: src/geometry/main.c
 bin/geometrylib.a: bin/geometrylib.o
 	ar rsc $@ $^
 
+bin/parser.a: bin/parser.o
+	ar rsc $@ $^
+
 bin/geometrylib.o: src/libgeometry/geometrylib.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+
+bin/parser.o: src/libgeometry/parser.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 clean:
