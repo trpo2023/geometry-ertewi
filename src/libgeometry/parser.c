@@ -1,9 +1,9 @@
 #include "parser.h"
 
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
 
-int find_circle(char* str, char **err_msg, int *err_smb, char **c_radius)
+int find_circle(char* str, char** err_msg, int* err_smb, char** c_radius)
 {
     unsigned int i, j;
     char buffer[2];

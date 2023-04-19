@@ -9,14 +9,14 @@
 
 int main(int argc, char* argv[])
 {
-    char *err_msg; // error message
+    char* err_msg; // error message
     int err_smb;   // symbol of error
     int found, s;
 
     char str[100 + 1];
     float radius;
 
-    char *c_radius;
+    char* c_radius;
     c_radius = malloc(100 * sizeof(char));
 
     FILE* tfile;
