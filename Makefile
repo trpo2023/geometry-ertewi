@@ -22,8 +22,8 @@ bin/parser.o: src/libgeometry/parser.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 clean:
-	rm -rf main bin/*.o
-	rm -rf main bin/*.d
-	rm -rf main bin/*.a
+	rm -rf bin/*.o
+	rm -rf bin/*.d
+	rm -rf bin/*.a
 	
 -include bin/main.d bin/geometrylib.d
