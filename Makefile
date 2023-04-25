@@ -3,27 +3,26 @@ CPPFLAGS = -MMD
 
 .PHONY: clean
 
-bin/main: bin/main.o bin/geometrylib.a bin/parser.a
+bin/main: obj/src/geometry/main.o bin/libgeometry.a
 	$(CC) $(CFLAGS) -o $@ $^
 
-bin/main.o: src/geometry/main.c
+obj/src/geometry/main.o: src/geometry/main.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< -I src
 	
-bin/geometrylib.a: bin/geometrylib.o
+bin/libgeometry.a: obj/src/libgeometry/geometrylib.o obj/src/libgeometry/parser.o
 	ar rsc $@ $^
 
-bin/parser.a: bin/parser.o
-	ar rsc $@ $^
-
-bin/geometrylib.o: src/libgeometry/geometrylib.c
+obj/src/libgeometry/geometrylib.o: src/libgeometry/geometrylib.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
-bin/parser.o: src/libgeometry/parser.c
+obj/src/libgeometry/parser.o: src/libgeometry/parser.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 clean:
-	rm -rf bin/*.o
-	rm -rf bin/*.d
+	rm -rf obj/src/libgeometry/*.o
+	rm -rf obj/src/geometry/*.o
+	rm -rf obj/src/libgeometry/*.d
+	rm -rf obj/src/geometry/*.d
 	rm -rf bin/*.a
 	
--include bin/main.d bin/geometrylib.d
+-include bin/main.d bin/geometrylib.d bin/parser.d
