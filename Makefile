@@ -1,12 +1,15 @@
-CFLAGS = -Wall -Wextra -Werror -lm
+CFLAGS = -Wall -Wextra -Werror
 CPPFLAGS = -MMD
 
 .PHONY: clean
 
 bin/main: obj/src/geometry/main.o bin/libgeometry.a
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lm
 
 obj/src/geometry/main.o: src/geometry/main.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< -I src -lm
+
+obj/test/main.o: test/geometry/main.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $< -I src
 	
 bin/libgeometry.a: obj/src/libgeometry/geometrylib.o obj/src/libgeometry/parser.o
@@ -16,6 +19,9 @@ obj/src/libgeometry/geometrylib.o: src/libgeometry/geometrylib.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 obj/src/libgeometry/parser.o: src/libgeometry/parser.c
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+
+obj/test/parser_test.o: test/parser_test.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 clean:
