@@ -3,13 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 
-int find_circle(
-        char* str,
-        char** err_msg,
-        int* err_smb,
-        char** c_radius,
-        char** x,
-        char** y)
+int find_circle(char* str, char** err_msg, int* err_smb, char** c_radius, char** x, char** y)
 {
     unsigned int i, j;
     char buffer[2];
