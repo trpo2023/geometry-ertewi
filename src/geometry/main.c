@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
             return 1;
         } else {
             printf("File opened succesfully\n\n");
-
+            printf("Input:\n");
             for (i = 0; i < n; i++) {
                 strings[i].count_figures = 0;
                 strings[i].index_figures = malloc(n * sizeof(int));
@@ -93,6 +93,7 @@ int main(int argc, char* argv[])
                     return 1;
                 }
             }
+            printf("\n");
         }
     }
     if (argc == 1) {
@@ -142,8 +143,6 @@ int main(int argc, char* argv[])
 
             c = sqrt((a * a) + (b * b));
 
-            printf("\n%f %f %f\n", a, b, c);
-
             if (c < strings[i].radius + strings[j].radius) {
                 strings[i].count_figures += 1;
                 strings[j].count_figures += 1;
@@ -157,7 +156,7 @@ int main(int argc, char* argv[])
             c = 0;
         }
 
-        printf("\n%s\n", strings[i].str);
+        printf("\n%s", strings[i].str);
         printf("  perimeter: = %.4f\n", count_perimeter(strings[i].radius));
         printf("  area: = %.4f\n", count_area(strings[i].radius));
         printf("  intersections: %d\n", strings[i].count_figures);
@@ -166,6 +165,7 @@ int main(int argc, char* argv[])
                 printf("    %d. circle\n", j + 1);
             }
         }
+        printf("\n");
     }
     printf("Exit program...\n");
     return 0;
